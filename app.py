@@ -33,6 +33,7 @@ def index():
 def get_items():
     """全アイテムを取得"""
     return jsonify({
+        'status': 'OK',
         'items': items,
         'count': len(items)
     })
@@ -43,8 +44,11 @@ def get_item(item_id):
     """指定されたIDのアイテムを取得"""
     for item in items:
         if item['id'] == item_id:
-            return jsonify(item)
-    return jsonify({'error': 'Item not found'}), 404
+            return jsonify({
+                'status': 'OK',
+                **item
+            })
+    return jsonify({'status': 'NG', 'error': 'Item not found'}), 404
 
 
 @app.route('/items', methods=['POST'])
@@ -52,7 +56,7 @@ def create_item():
     """新しいアイテムを作成"""
     global item_id_counter
     if not request.json or 'name' not in request.json:
-        return jsonify({'error': 'Bad request - name field is required'}), 400
+        return jsonify({'status': 'NG', 'error': 'Bad request - name field is required'}), 400
     
     item_id_counter += 1
     new_item = {
@@ -61,7 +65,10 @@ def create_item():
         'description': request.json.get('description', '')
     }
     items.append(new_item)
-    return jsonify(new_item), 201
+    return jsonify({
+        'status': 'OK',
+        **new_item
+    }), 201
 
 
 @app.route('/items/<int:item_id>', methods=['DELETE'])
@@ -71,10 +78,10 @@ def delete_item(item_id):
     # アイテムが存在するか確認
     item_exists = any(item['id'] == item_id for item in items)
     if not item_exists:
-        return jsonify({'error': 'Item not found'}), 404
+        return jsonify({'status': 'NG', 'error': 'Item not found'}), 404
     
     items = [item for item in items if item['id'] != item_id]
-    return jsonify({'message': 'Item deleted successfully'})
+    return jsonify({'status': 'OK', 'message': 'Item deleted successfully'})
 
 
 if __name__ == '__main__':
