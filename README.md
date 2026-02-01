@@ -22,6 +22,20 @@ python app.py
 サーバーは `http://localhost:5000` で起動します。
 The server will start at `http://localhost:5000`.
 
+### 環境変数 / Environment Variables
+
+- `FLASK_DEBUG`: デバッグモードの有効/無効 (デフォルト: True) / Enable/disable debug mode (default: True)
+- `FLASK_HOST`: バインドするホスト (デフォルト: 127.0.0.1) / Host to bind to (default: 127.0.0.1)
+- `FLASK_PORT`: ポート番号 (デフォルト: 5000) / Port number (default: 5000)
+
+**注意**: 本番環境では `FLASK_DEBUG=False` を設定してください。
+**WARNING**: Set `FLASK_DEBUG=False` in production environments.
+
+例 / Example:
+```bash
+FLASK_DEBUG=False FLASK_HOST=0.0.0.0 FLASK_PORT=8080 python app.py
+```
+
 ## API エンドポイント / API Endpoints
 
 - `GET /` - ウェルカムメッセージとエンドポイント一覧 / Welcome message and endpoint list

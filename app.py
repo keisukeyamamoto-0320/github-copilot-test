@@ -4,6 +4,7 @@
 Simple Web API System
 """
 
+import os
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
@@ -77,6 +78,13 @@ def delete_item(item_id):
 
 
 if __name__ == '__main__':
-    # デバッグモードは開発環境のみで使用してください
-    # Debug mode should only be used in development environment
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    # 環境変数から設定を読み込む / Load settings from environment variables
+    debug_mode = os.environ.get('FLASK_DEBUG', 'True').lower() == 'true'
+    host = os.environ.get('FLASK_HOST', '127.0.0.1')
+    port = int(os.environ.get('FLASK_PORT', '5000'))
+    
+    # 注意: debug=True は開発環境のみで使用してください
+    # WARNING: debug=True should only be used in development environment
+    # 本番環境では FLASK_DEBUG=False を設定してください
+    # Set FLASK_DEBUG=False in production
+    app.run(debug=debug_mode, host=host, port=port)
